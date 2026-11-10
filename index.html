@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="en" data-embed>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arcwise Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Jonathan Jackson Ameche (Arcwise): Roblox backend programmer and technical lead. Slap Battles, Anime Warriors, Combat Warriors, Sunshine Valley.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inconsolata:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one left-aligned 1120px column on a sky. Prose sits straight on the sky; the thick-stroke
+   "simulator UI" window treatment is kept for things you can operate or that are a game.
+   Colours are classic BrickColors, type is three faces from Roblox's own Enum.Font. */
+:root{
+  --sky:#D3EAFA; --sky-low:#EDF6FD;
+  --panel:#FDFEFF; --panel-2:#E9F1F8;
+  --ink:#152238; --ink-soft:#43546C;
+  --stroke:#152238;
+  --link:#0B5A96;
+  --select:#0D69AC; --on-select:#FFFFFF;
+  --cloud:#FFFFFF;
+  --ground:#62AD5B; --ground-stud:#58A352; --water:#4AA3DF; --soil:#8B5E3F;
+  --plate:#A3A2A5; --plate-stud:#B3B2B5; --plate-ink:#1B1B1F;
+  --brick-red:#C4281C; --brick-blue:#0D69AC; --brick-yellow:#F5CD30; --brick-green:#3F8A45;
+  --brick-orange:#DA8541; --brick-violet:#6B327C; --brick-stone:#635F62;
+  --on-brick:#FFFFFF; --brick-ink:#131A26;
+  --font-display:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --font-body:"Source Sans 3","Source Sans Pro","Segoe UI",system-ui,sans-serif;
+  --font-code:"Inconsolata","SF Mono",Consolas,monospace;
+  --r:14px; --bw:3px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#0F1A2C; --sky-low:#132238;
+    --panel:#1B2B44; --panel-2:#243756;
+    --ink:#EAF2FB; --ink-soft:#A8B8CC;
+    --stroke:#03060C;
+    --link:#7FC6F7;
+    --select:#1F78BC; --on-select:#FFFFFF;
+    --cloud:#1A2A44;
+    --ground:#2F6E3B; --ground-stud:#296435; --water:#2A6DA5; --soil:#5C3D2A;
+    --plate:#4A494D; --plate-stud:#57565A; --plate-ink:#F2F2F4;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#0F1A2C; --sky-low:#132238;
+  --panel:#1B2B44; --panel-2:#243756;
+  --ink:#EAF2FB; --ink-soft:#A8B8CC;
+  --stroke:#03060C;
+  --link:#7FC6F7;
+  --select:#1F78BC; --on-select:#FFFFFF;
+  --cloud:#1A2A44;
+  --ground:#2F6E3B; --ground-stud:#296435; --water:#2A6DA5; --soil:#5C3D2A;
+  --plate:#4A494D; --plate-stud:#57565A; --plate-ink:#F2F2F4;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  font:400 17px/1.55 var(--font-body);
+  background-color:var(--sky-low);
+  background-image:linear-gradient(var(--sky),var(--sky-low));
+  background-size:100% 900px; background-repeat:no-repeat;
+  -webkit-text-size-adjust:100%;
+}
+img{max-width:100%}
+[hidden]{display:none!important}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:var(--link);text-underline-offset:.18em}
+:focus-visible{outline:3px solid var(--link);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.08}
+h2{font-weight:600;font-size:clamp(1.75rem,3.4vw,2.5rem)}
+h3{font-weight:600;font-size:1.35rem}
+code,.mono{font-family:var(--font-code)}
+
+.wrap{
+  max-width:1120px; margin-inline:auto;
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+}
+main{display:flex;flex-direction:column;gap:clamp(64px,9vw,112px);padding-block:8px clamp(64px,9vw,112px)}
+.sec-head{display:flex;flex-direction:column;gap:10px;max-width:44rem;margin-bottom:28px}
+.path{font:700 .9rem/1 var(--font-code);color:var(--ink-soft);letter-spacing:.02em}
+.lede{color:var(--ink-soft);font-size:1.08rem}
+
+/* window treatment */
+.win{background:var(--panel);border:var(--bw) solid var(--stroke);border-radius:var(--r);box-shadow:0 6px 0 var(--stroke)}
+.btn{
+  display:inline-flex;align-items:center;gap:.45em;cursor:pointer;text-decoration:none;
+  font:600 1rem/1 var(--font-display);
+  padding:.72em 1.15em;border:var(--bw) solid var(--stroke);border-radius:12px;
+  background:var(--brick-yellow);color:var(--brick-ink);box-shadow:0 4px 0 var(--stroke);
+  transition:transform .06s,box-shadow .06s;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--stroke)}
+.btn-plain{background:var(--panel);color:var(--ink)}
+.btn-sm{font-size:.88rem;padding:.5em .8em;border-width:2px;border-radius:9px;box-shadow:0 3px 0 var(--stroke)}
+.chip{display:inline-block;font:700 .82rem/1 var(--font-code);padding:.42em .6em;border-radius:7px;background:var(--panel-2);color:var(--ink)}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.brand{display:inline-flex;align-items:center;gap:10px;font:700 1.3rem/1 var(--font-display);color:var(--ink);text-decoration:none}
+.stud{width:26px;height:26px;border-radius:6px;border:2.5px solid var(--stroke);background:var(--brick-red);position:relative}
+.stud::after{content:"";position:absolute;inset:4px;border-radius:50%;border:2.5px solid var(--stroke);background:var(--brick-red);filter:brightness(1.15)}
+.top nav{display:flex;align-items:center;gap:22px}
+.top nav a{font:600 .98rem/1 var(--font-display);color:var(--ink);text-decoration:none}
+.top nav a:hover{text-decoration:underline}
+.clock{font:700 .85rem/1 var(--font-code);white-space:nowrap}
+@media (max-width:760px){.top nav a{display:none}}
+
+/* hero */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(28px,5vw,64px);align-items:center;padding-block:clamp(20px,5vw,56px) 0}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero h1{font-weight:700;font-size:clamp(2.5rem,6.4vw,4.75rem);letter-spacing:-.01em}
+.pop{color:var(--brick-yellow);-webkit-text-stroke:.16em var(--stroke);paint-order:stroke fill;text-shadow:0 .1em 0 var(--stroke);white-space:nowrap}
+.hero .lede{max-width:36rem;font-size:1.2rem}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.cloud{position:absolute;z-index:-1;height:34px;width:120px;border-radius:10px;background:var(--cloud);opacity:.8}
+.cloud::before,.cloud::after{content:"";position:absolute;background:var(--cloud);border-radius:10px}
+.cloud::before{width:56px;height:34px;left:22px;top:-18px}
+.cloud::after{width:44px;height:26px;left:-22px;top:12px}
+.cloud.c1{right:6%;top:-6px}
+.cloud.c2{left:38%;bottom:-36px;transform:scale(.7)}
+
+.board{min-width:0}
+.board-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:var(--bw) solid var(--stroke);font:600 1.05rem/1 var(--font-display)}
+.board-head .mono{font-size:.8rem;font-weight:700;color:var(--ink-soft)}
+.board dl{display:flex;flex-direction:column}
+.board dl div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 16px}
+.board dl div:nth-child(even){background:var(--panel-2)}
+.board dl div:last-child{border-radius:0 0 calc(var(--r) - 4px) calc(var(--r) - 4px)}
+.board dt{color:var(--ink-soft);font-size:.98rem}
+.board dd{font:700 1.45rem/1 var(--font-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+
+/* sandbox */
+.sim-win{overflow:hidden}
+.sim-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:10px 14px;border-bottom:var(--bw) solid var(--stroke);background:var(--panel-2)}
+.sim-title{display:flex;align-items:center;gap:12px;font:700 .92rem/1 var(--font-code)}
+.readout{color:var(--ink-soft);font-variant-numeric:tabular-nums;min-width:11.5em}
+.sim-tools{display:flex;flex-wrap:wrap;gap:8px}
+.sim-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;background:var(--ground)}
+#sim{display:block;width:100%;height:444px;background:var(--ground);cursor:pointer;touch-action:manipulation}
+.inspector{border-left:var(--bw) solid var(--stroke);background:var(--panel);min-width:0;display:flex;flex-direction:column}
+.insp-h{font:700 .82rem/1 var(--font-code);padding:9px 12px;background:var(--panel-2);border-bottom:2px solid var(--stroke);color:var(--ink-soft)}
+.kv{display:grid;grid-template-columns:5.2em minmax(0,1fr);font-size:.95rem}
+.kv dt,.kv dd{padding:6px 12px;border-bottom:1px solid var(--panel-2)}
+.kv dt{color:var(--ink-soft)}
+.kv dd{font-family:var(--font-code);font-weight:700;overflow-wrap:anywhere}
+#p-plan{padding:8px 12px 12px;min-height:150px;display:flex;flex-direction:column;gap:3px;counter-reset:s}
+#p-plan li{counter-increment:s;font:700 .92rem/1.2 var(--font-code);padding:4px 8px;border-radius:6px;color:var(--ink-soft)}
+#p-plan li::before{content:counter(s) ". "}
+#p-plan li.done{text-decoration:line-through;opacity:.6}
+#p-plan li.now{background:var(--select);color:var(--on-select)}
+.sim-note{margin-top:22px;max-width:44rem;color:var(--ink-soft)}
+@media (max-width:760px){
+  .sim-body{grid-template-columns:minmax(0,1fr)}
+  .inspector{border-left:0;border-top:var(--bw) solid var(--stroke)}
+  #p-plan{min-height:0}
+}
+
+/* games */
+.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px}
+.game{display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.game-feature{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.feature-side{display:flex;flex-direction:column;min-width:0;border-right:var(--bw) solid var(--stroke)}
+.thumb{display:block;aspect-ratio:16/9;max-width:100%;overflow:hidden;border-bottom:var(--bw) solid var(--stroke)}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.thumb:focus-visible{outline-offset:-5px}
+.t-slap{background-color:var(--brick-red)}
+.t-sun{background-color:var(--brick-green)}
+.t-anime{background-color:var(--brick-blue)}
+.t-combat{background-color:var(--brick-stone)}
+.t-para{background-color:var(--brick-violet)}
+.t-egg{background-color:var(--brick-orange)}
+.t-hallow{background-color:var(--brick-ink)}
+.play{align-self:flex-start;margin-top:auto}
+.game-body{display:flex;flex-direction:column;flex:1;gap:12px;padding:20px 22px 24px;min-width:0}
+.meta{font:700 .85rem/1.3 var(--font-code);color:var(--ink-soft)}
+.ticks{display:flex;flex-direction:column;gap:6px}
+.ticks li{position:relative;padding-left:1.25em}
+.ticks li::before{content:"";position:absolute;left:0;top:.52em;width:.55em;height:.55em;border-radius:2px;background:var(--brick-yellow);border:1.5px solid var(--stroke)}
+.growth{display:flex;flex-direction:column;gap:8px;margin:20px 22px 24px;padding:14px 16px;border-radius:10px;background:var(--panel-2)}
+.growth-h{font:700 .82rem/1 var(--font-code);color:var(--ink-soft)}
+.g-row{display:grid;grid-template-columns:7.2em minmax(0,1fr) 3.2em;align-items:center;gap:12px;font-size:.95rem}
+.g-track{height:18px;display:block}
+.g-bar{display:block;height:100%;border:2px solid var(--stroke);border-radius:5px;background:var(--brick-stone)}
+.g-bar.hot{background:var(--brick-red)}
+.g-val{font:700 1.15rem/1 var(--font-display);font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:900px){
+  .games{grid-template-columns:minmax(0,1fr)}
+  .game-feature{grid-template-columns:minmax(0,1fr)}
+  .feature-side{border-right:0}
+  .feature-side .growth{margin-bottom:4px}
+}
+.credits{margin-top:44px}
+.credits h3{margin-bottom:10px}
+.credits li{display:grid;grid-template-columns:5.5em 15em minmax(0,1fr);gap:4px 20px;padding:12px 0;border-top:2px solid var(--panel-2);align-items:baseline}
+.credits .yr{font:700 .9rem/1.3 var(--font-code);color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.credits .nm{font:600 1.08rem/1.2 var(--font-display)}
+.credits .what{color:var(--ink-soft)}
+@media (max-width:700px){.credits li{grid-template-columns:5.5em minmax(0,1fr)}.credits .what{grid-column:2}}
+
+/* systems: Explorer + Properties */
+.studio{display:grid;grid-template-columns:270px minmax(0,1fr);overflow:hidden}
+.explorer{border-right:var(--bw) solid var(--stroke);display:flex;flex-direction:column;min-width:0}
+.pane-h{font:700 .82rem/1 var(--font-code);padding:10px 14px;background:var(--panel-2);border-bottom:2px solid var(--stroke);color:var(--ink-soft)}
+.tree{display:flex;flex-direction:column;padding:8px}
+.tree-root{font:700 .95rem/1 var(--font-code);padding:7px 8px;color:var(--ink-soft)}
+.tree button{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;cursor:pointer;
+  font:700 .98rem/1 var(--font-code);color:var(--ink);background:none;border:0;border-radius:7px;padding:8px 8px 8px 24px;
+}
+.tree button::before{content:"";flex:none;width:12px;height:12px;border-radius:3px;background:var(--brick-violet);border:1.5px solid var(--stroke)}
+.tree button:hover{background:var(--panel-2)}
+.tree button[aria-selected="true"]{background:var(--select);color:var(--on-select)}
+.props{min-width:0;display:flex;flex-direction:column}
+.prop-panel{display:flex;flex-direction:column}
+.prop-row{display:grid;grid-template-columns:8.5em minmax(0,1fr);border-bottom:1px solid var(--panel-2)}
+.prop-row dt{padding:14px 16px;font:700 .9rem/1.4 var(--font-code);color:var(--ink-soft)}
+.prop-row dd{padding:14px 16px 14px 0;min-width:0}
+.prop-row dd.name{font:600 1.4rem/1.1 var(--font-display)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:760px){
+  .studio{grid-template-columns:minmax(0,1fr)}
+  .explorer{border-right:0;border-bottom:var(--bw) solid var(--stroke)}
+  .tree{flex-direction:row;flex-wrap:wrap;gap:4px}
+  .tree-root{display:none}
+  .tree button{width:auto;padding:8px 10px}
+  .prop-row{grid-template-columns:minmax(0,1fr)}
+  .prop-row dt{padding-bottom:0}
+  .prop-row dd{padding:6px 16px 14px}
+}
+
+/* update log */
+.log{display:flex;flex-direction:column;max-width:52rem}
+.log li{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:6px 24px;padding:18px 0;border-top:2px solid var(--panel-2)}
+.log .when{font:700 .95rem/1.5 var(--font-code);color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.log .what{display:flex;flex-direction:column;gap:4px}
+.log .what strong{font:600 1.15rem/1.25 var(--font-display)}
+.log .what span{color:var(--ink-soft)}
+.log .live .when{color:var(--link)}
+@media (max-width:600px){.log li{grid-template-columns:minmax(0,1fr)}}
+
+/* working style + contact */
+.duo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,64px);align-items:start}
+.duo .say{display:flex;flex-direction:column;gap:16px;max-width:38rem}
+.duo .say p{font-size:1.12rem}
+.contact{padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.mail code{font-size:1.15rem;font-weight:700;overflow-wrap:anywhere;user-select:all}
+.contact ul{display:flex;flex-direction:column;gap:8px}
+.contact small{color:var(--ink-soft);font-size:.92rem}
+@media (max-width:860px){.duo{grid-template-columns:minmax(0,1fr)}}
+
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 24px}
+.vids-2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:46rem}
+.sub-h{margin:40px 0 16px}
+.vid{display:flex;flex-direction:column;gap:12px;min-width:0}
+.vid-thumb,.vid-frame{display:block;position:relative;width:100%;aspect-ratio:16/9;max-width:100%;overflow:hidden;border:var(--bw) solid var(--stroke);border-radius:12px;box-shadow:0 5px 0 var(--stroke);background:var(--brick-ink)}
+.vid-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.vid-play{position:absolute;left:50%;top:50%;width:66px;height:46px;margin:-23px 0 0 -33px;border-radius:12px;background:var(--brick-red);border:var(--bw) solid var(--brick-ink);box-shadow:0 4px 0 var(--brick-ink);transition:transform .08s}
+.vid-play::after{content:"";position:absolute;left:50%;top:50%;margin:-9px 0 0 -6px;border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent var(--on-brick)}
+.vid-thumb:hover .vid-play{transform:scale(1.1)}
+.vid figcaption{display:flex;flex-direction:column;gap:3px}
+.vid figcaption strong{font:600 1.1rem/1.25 var(--font-display)}
+.vid figcaption span{color:var(--ink-soft);font-size:.95rem}
+.vid-big{grid-column:span 2;grid-row:span 2}
+.vid-big figcaption{gap:6px}
+.vid-big figcaption strong{font-size:1.5rem}
+.vid-big figcaption p{font-size:1.05rem;max-width:40rem}
+@media (max-width:900px){.vids{grid-template-columns:repeat(2,minmax(0,1fr))}.vid-big{grid-row:auto}}
+@media (max-width:560px){.vids,.vids-2{grid-template-columns:minmax(0,1fr)}.vid-big{grid-column:auto}}
+@media (prefers-reduced-motion:reduce){.vid-play{transition:none}}
+
+footer{
+  border-top:var(--bw) solid var(--stroke);
+  background-color:var(--plate);color:var(--plate-ink);
+  background-image:radial-gradient(circle,var(--plate-stud) 0 8px,transparent 8.5px);background-size:32px 32px;
+}
+footer .wrap{padding-block:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:.95rem}
+footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
+
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='7' fill='%23C4281C' stroke='%23152238' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23DC4A3D' stroke='%23152238' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://volticoil.github.io/arcwise-portfolio/">
+<meta name="theme-color" content="#C4281C">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://volticoil.github.io/arcwise-portfolio/">
+<meta property="og:title" content="Arcwise | Roblox programmer">
+<meta property="og:description" content="Jonathan Jackson Ameche (Arcwise). Roblox backend programmer and technical lead: Slap Battles, Sunshine Valley, Paradise Life, Anime Warriors, Combat Warriors.">
+<meta name="twitter:card" content="summary">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top"><span class="stud" aria-hidden="true"></span>Arcwise</a>
+    <nav aria-label="Sections">
+      <a href="#sandbox">Sandbox</a>
+      <a href="#games">Games</a>
+      <a href="#footage">Footage</a>
+      <a href="#systems">Systems</a>
+      <a href="#log">Update log</a>
+      <a href="#contact">Contact</a>
+      <button class="btn btn-plain btn-sm clock" id="clock" type="button" aria-label="Switch between day and night">ClockTime = 14</button>
+    </nav>
+  </header>
+</div>
+
+<main class="wrap" id="top">
+
+  <section class="hero">
+    <span class="cloud c1" aria-hidden="true"></span>
+    <span class="cloud c2" aria-hidden="true"></span>
+    <div class="hero-copy">
+      <h1>I build the systems <span class="pop">front-page</span> Roblox games run on.</h1>
+      <p class="lede">I'm Jonathan Jackson Ameche. On Roblox I'm Arcwise. I've been on the platform since 2008 and programming on it since 2013. I'm a backend programmer and technical lead who also cares how the game plays.</p>
+      <div class="cta">
+        <a class="btn" href="#games">See the games</a>
+        <a class="btn btn-plain" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <aside class="board win" aria-label="Career stats">
+      <div class="board-head"><span>Arcwise</span><span class="mono">leaderstats</span></div>
+      <dl>
+        <div><dt>Slap Battles plays when I left</dt><dd>1.5B</dd></div>
+        <div><dt>Front-page games</dt><dd>4</dd></div>
+        <div><dt>Contracts for Roblox</dt><dd>2</dd></div>
+        <div><dt>Internships at Roblox</dt><dd>2</dd></div>
+        <div><dt>On the platform since</dt><dd>2008</dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <section id="sandbox" aria-labelledby="h-sandbox">
+    <div class="sec-head">
+      <span class="path">workspace.NPCs</span>
+      <h2 id="h-sandbox">NPCs that plan their own day</h2>
+      <p class="lede">NPC AI is where I started, and it's still my favourite thing to build. I wrote job-running GOAP NPCs for Boundless, a roguelike RPG I shipped, and that work scored 98 as a university assignment. The villagers below run a small version of it: each one picks a goal, then the planner searches its actions for the cheapest route there. Click one to read its plan.</p>
+    </div>
+    <div class="sim-win win">
+      <div class="sim-bar">
+        <div class="sim-title"><span>GoapSandbox</span><span class="readout" id="readout" aria-live="off">6 NPCs</span></div>
+        <div class="sim-tools">
+          <button class="btn btn-plain btn-sm" id="b-play" type="button">Pause</button>
+          <button class="btn btn-plain btn-sm" id="b-next" type="button">Next NPC</button>
+          <button class="btn btn-sm" id="b-spawn" type="button">Spawn 400</button>
+        </div>
+      </div>
+      <div class="sim-body">
+        <canvas id="sim" role="img" aria-label="A small RPG village where blocky NPCs walk between a mine, a forest, a forge, a camp, a shop and a gate, each following its own plan.">Your browser can't draw the sandbox.</canvas>
+        <div class="inspector">
+          <div class="insp-h">Properties</div>
+          <dl class="kv">
+            <dt>Name</dt><dd id="p-name">Villager_01</dd>
+            <dt>Goal</dt><dd id="p-goal">ArmGuard</dd>
+            <dt>Carrying</dt><dd id="p-state">nothing</dd>
+            <dt>Coins</dt><dd id="p-coins">0</dd>
+          </dl>
+          <div class="insp-h">Plan</div>
+          <ol id="p-plan"><li class="now">MineOre</li><li>ChopWood</li><li>SmeltIngot</li><li>ForgeSword</li><li>ArmGuard</li></ol>
+        </div>
+      </div>
+    </div>
+    <p class="sim-note">This demo is JavaScript. The original planner is Luau. Separately, I've run 400 physics-simulated NPCs at 60 FPS on Roblox by simulating them on nearby clients and syncing with the server. Press Spawn 400 to see how this one holds up.</p>
+    <h3 class="sub-h">The originals, running in Roblox</h3>
+    <div class="vids vids-2">
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=Sw1vYaLk_40" target="_blank" rel="noopener" data-yt="Sw1vYaLk_40" aria-label="Play video: Job-running GOAP NPCs in Boundless">
+          <img src="videos/Sw1vYaLk_40.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Job-running GOAP NPCs in Boundless</strong><span>My own recording</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=YkzLIZb5Bes" target="_blank" rel="noopener" data-yt="YkzLIZb5Bes" aria-label="Play video: Physics-simulated NPC crowd in Roblox">
+          <img src="videos/YkzLIZb5Bes.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>A physics-simulated NPC crowd</strong><span>My own recording</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="games" aria-labelledby="h-games">
+    <div class="sec-head">
+      <span class="path">ReplicatedStorage.Games</span>
+      <h2 id="h-games">Games I've shipped</h2>
+      <p class="lede">Four of my games have reached the Roblox front page, and Roblox has contracted me twice for its own events. I was lead programmer on most of what's listed here.</p>
+    </div>
+
+    <div class="games">
+      <article class="game game-feature win">
+        <div class="feature-side">
+          <a class="thumb t-slap" href="https://www.roblox.com/games/6403373529"><img src="thumbs/slap-battles.jpg" alt="Slap Battles on Roblox" width="768" height="432"></a>
+          <div class="growth" role="img" aria-label="Slap Battles plays grew from 200 million when I joined to 1.5 billion when I left.">
+            <span class="growth-h">Total plays</span>
+            <div class="g-row"><span>When I joined</span><span class="g-track"><span class="g-bar" style="width:13.33%"></span></span><span class="g-val">200M</span></div>
+            <div class="g-row"><span>When I left</span><span class="g-track"><span class="g-bar hot" style="width:100%"></span></span><span class="g-val">1.5B</span></div>
+          </div>
+        </div>
+        <div class="game-body">
+          <p class="meta">Lead developer · 2023 to mid 2024</p>
+          <h3>Slap Battles</h3>
+          <p>I reprogrammed the whole game from the ground up while it stayed live, and moved the codebase out of Studio into a Git repository synced with Rojo.</p>
+          <ul class="ticks">
+            <li>Rebuilt the code as a structured, object-oriented framework the team could build on</li>
+            <li>Shipped weekly content updates and several Roblox partnership events</li>
+            <li>Moved the game from a profile to a group without losing players</li>
+            <li>Built the <a href="https://www.youtube.com/watch?v=jA0x9pXHVvU&t=310s">Eternal Bob boss fight</a></li>
+            <li>Grew the game's X account from zero to over 100k followers</li>
+          </ul>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/6403373529">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-sun" href="https://www.roblox.com/games/128780451608341"><img src="thumbs/sunshine-valley.jpg" alt="Sunshine Valley on Roblox" width="768" height="429" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Latest project</p>
+          <h3>Sunshine Valley</h3>
+          <p>A multiplayer farming and life-simulation game. It is my most ambitious project so far, built from many systems that all depend on each other.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/128780451608341">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-para" href="https://www.roblox.com/games/16242519945"><img src="thumbs/paradise-life.jpg" alt="Paradise Life on Roblox" width="768" height="432" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Lead programmer</p>
+          <h3>Paradise Life</h3>
+          <p>A roleplay life-sim about owning, decorating and living in your dream home. I led the programming from the foundations up.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/16242519945">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-combat" href="https://www.roblox.com/games/4282985734"><img src="thumbs/combat-warriors.jpg" alt="Combat Warriors on Roblox" width="768" height="432" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Boss systems · late 2022</p>
+          <h3>Combat Warriors</h3>
+          <p>I built the boss fight system and the boss AI behind it, along with a number of weapons and cosmetics.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/4282985734">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-anime" href="https://www.roblox.com/games/7177496972"><img src="thumbs/anime-warriors.jpg" alt="Anime Warriors on Roblox" width="768" height="432" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Backend, UI, project lead · 2021 to 2022</p>
+          <h3>Anime Warriors</h3>
+          <p>I designed and programmed the entire backend apart from the AI, plus the UI and its front-end hooks. I then managed the 2022 revamp, which added PvP and rebuilt PvE.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/7177496972">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-egg" href="https://www.roblox.com/games/2546368429/Egg-Hunt-2019-Scrambled-In-Time"><img src="thumbs/egg-hunt-2019.jpg" alt="Egg Hunt 2019: Scrambled in Time on Roblox" width="768" height="432" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Programmer · contracted by Roblox · 2019</p>
+          <h3>Egg Hunt 2019: Scrambled in Time</h3>
+          <p>Roblox's official Egg Hunt for 2019. Roblox contracted me as a programmer on the event, which has been played over 28 million times.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/2546368429/Egg-Hunt-2019-Scrambled-In-Time">Open on Roblox</a>
+        </div>
+      </article>
+
+      <article class="game win">
+        <a class="thumb t-hallow" href="https://www.roblox.com/games/876729828/Hallows-Eve-2017-A-Tale-of-Lost-Souls"><img src="thumbs/hallows-eve-2017.jpg" alt="Hallow's Eve 2017: A Tale of Lost Souls on Roblox" width="768" height="432" loading="lazy"></a>
+        <div class="game-body">
+          <p class="meta">Programmer · contracted by Roblox · 2017</p>
+          <h3>Hallow's Eve 2017: A Tale of Lost Souls</h3>
+          <p>Roblox's official Halloween event for 2017, and my first contract for Roblox.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/876729828/Hallows-Eve-2017-A-Tale-of-Lost-Souls">Open on Roblox</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="credits">
+      <h3>More credits</h3>
+      <ul>
+        <li><span class="yr">2021</span><span class="nm">Boundless V2</span><span class="what">Lead developer and sole programmer on the follow-up. Not released.</span></li>
+        <li><span class="yr">2020</span><span class="nm">Boundless</span><span class="what">Sole programmer on an open-world roguelike RPG. Shipped with 140,000 lines of code and GOAP-driven NPCs.</span></li>
+        <li><span class="yr">2019</span><span class="nm">Craftknight Crusaders</span><span class="what">Sole programmer on a large RPG, built on the Roblox Accelerator programme.</span></li>
+        <li><span class="yr">2018</span><span class="nm">Dragon Soul</span><span class="what">Programmer, on the Roblox Accelerator programme.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="footage" aria-labelledby="h-footage">
+    <div class="sec-head">
+      <span class="path">workspace.Footage</span>
+      <h2 id="h-footage">See them played</h2>
+      <p class="lede">Footage of the games in action, mostly recorded by YouTubers who played them.</p>
+    </div>
+    <div class="vids">
+      <figure class="vid vid-big">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=jA0x9pXHVvU&t=310s" target="_blank" rel="noopener" data-yt="jA0x9pXHVvU" data-start="310" aria-label="Play video: Slap Battles, the Eternal Bob boss fight">
+          <img src="videos/jA0x9pXHVvU.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Slap Battles: the Eternal Bob boss fight</strong><span>Video by Bilify. Starts at the fight, 5:10 in.</span><p>I built this fight, and it did wonders for the game's marketing. This is a player's guide to beating it.</p></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=ayuQAeBLpko" target="_blank" rel="noopener" data-yt="ayuQAeBLpko" aria-label="Play video: Sunshine Valley official trailer">
+          <img src="videos/ayuQAeBLpko.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Sunshine Valley: official trailer</strong><span>From the Playful Games channel</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=2uYP_Ib8LCw" target="_blank" rel="noopener" data-yt="2uYP_Ib8LCw" aria-label="Play video: Paradise Life, a first look">
+          <img src="videos/2uYP_Ib8LCw.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Paradise Life: a first look</strong><span>Video by PixelPlayQuest</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=iHm3XY0x9ZM" target="_blank" rel="noopener" data-yt="iHm3XY0x9ZM" aria-label="Play video: Combat Warriors boss fight">
+          <img src="videos/iHm3XY0x9ZM.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Combat Warriors: the boss fight</strong><span>Video by Elemental</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=x6GL1GlpD-I&t=657s" target="_blank" rel="noopener" data-yt="x6GL1GlpD-I" data-start="657" aria-label="Play video: Anime Warriors revamp, PvP">
+          <img src="videos/x6GL1GlpD-I.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Anime Warriors revamp</strong><span>Video by Infernasu Archive. PvP from 10:57, PvE from 17:15.</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=Kp2aUrGDcKM" target="_blank" rel="noopener" data-yt="Kp2aUrGDcKM" aria-label="Play video: Anime Warriors at launch">
+          <img src="videos/Kp2aUrGDcKM.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Anime Warriors at launch</strong><span>Video by Infernasu Archive</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=UT2oKnIvyHw" target="_blank" rel="noopener" data-yt="UT2oKnIvyHw" aria-label="Play video: Boundless, the Yeti">
+          <img src="videos/UT2oKnIvyHw.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Boundless: the Yeti</strong><span>From the Boundless channel</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=pN-GDEYJYtE" target="_blank" rel="noopener" data-yt="pN-GDEYJYtE" aria-label="Play video: Boundless, trap oven">
+          <img src="videos/pN-GDEYJYtE.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Boundless: the trap oven</strong><span>From the Boundless channel</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=bQy02YdYo3w" target="_blank" rel="noopener" data-yt="bQy02YdYo3w" aria-label="Play video: Egg Hunt 2019, Scrambled in Time">
+          <img src="videos/bQy02YdYo3w.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Egg Hunt 2019: Scrambled in Time</strong><span>Video by TwiistedPandora</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=IbI3XMnFgFk" target="_blank" rel="noopener" data-yt="IbI3XMnFgFk" aria-label="Play video: Craftknight Crusaders">
+          <img src="videos/IbI3XMnFgFk.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Craftknight Crusaders</strong><span>Video by EtherealMiracle</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=UCffs3fyuPc" target="_blank" rel="noopener" data-yt="UCffs3fyuPc" aria-label="Play video: Dragon Soul">
+          <img src="videos/UCffs3fyuPc.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Dragon Soul</strong><span>Video by Roball</span></figcaption>
+      </figure>
+      <figure class="vid">
+        <a class="vid-thumb" href="https://www.youtube.com/watch?v=HTO5ObEQgu0" target="_blank" rel="noopener" data-yt="HTO5ObEQgu0" aria-label="Play video: Hallow's Eve 2017">
+          <img src="videos/HTO5ObEQgu0.jpg" alt="" width="854" height="480" loading="lazy">
+          <span class="vid-play" aria-hidden="true"></span>
+        </a>
+        <figcaption><strong>Hallow's Eve 2017</strong><span>Video by Duck</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="systems" aria-labelledby="h-systems">
+    <div class="sec-head">
+      <span class="path">ServerScriptService.Systems</span>
+      <h2 id="h-systems">What I build</h2>
+      <p class="lede">My heart is in the backend, but I've worked across the whole stack. Pick a module to see what's inside.</p>
+    </div>
+    <div class="studio win">
+      <div class="explorer">
+        <div class="pane-h">Explorer</div>
+        <div class="tree" role="tablist" aria-orientation="vertical" aria-label="Systems">
+          <span class="tree-root" aria-hidden="true">▾ Systems</span>
+          <button role="tab" type="button" id="t-arch" aria-controls="s-arch" aria-selected="true">Architecture</button>
+          <button role="tab" type="button" id="t-npc" aria-controls="s-npc" aria-selected="false" tabindex="-1">NPCSystems</button>
+          <button role="tab" type="button" id="t-net" aria-controls="s-net" aria-selected="false" tabindex="-1">Networking</button>
+          <button role="tab" type="button" id="t-data" aria-controls="s-data" aria-selected="false" tabindex="-1">DataManagement</button>
+          <button role="tab" type="button" id="t-play" aria-controls="s-play" aria-selected="false" tabindex="-1">Gameplay</button>
+          <button role="tab" type="button" id="t-ui" aria-controls="s-ui" aria-selected="false" tabindex="-1">Interface</button>
+          <button role="tab" type="button" id="t-perf" aria-controls="s-perf" aria-selected="false" tabindex="-1">Performance</button>
+          <button role="tab" type="button" id="t-tool" aria-controls="s-tool" aria-selected="false" tabindex="-1">Tooling</button>
+        </div>
+      </div>
+      <div class="props">
+        <div class="pane-h">Properties</div>
+
+        <dl class="prop-panel" role="tabpanel" id="s-arch" aria-labelledby="t-arch">
+          <div class="prop-row"><dt>Name</dt><dd class="name">Game architecture</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>I build foundations other programmers want to use. Several teams have picked up frameworks I wrote and kept building on them long after.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Reusable frameworks</span><span class="chip">Component-based design</span><span class="chip">Event-driven</span><span class="chip">OOP</span><span class="chip">Hashing</span><span class="chip">Promises</span><span class="chip">Maids</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Slap Battles (full rewrite while live), Anime Warriors, Sunshine Valley</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-npc" aria-labelledby="t-npc" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">AI and NPC systems</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>My bread and butter from the start. I like NPCs that are fun to interact with and a little smarter than you expect.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">GOAP</span><span class="chip">Behaviour trees</span><span class="chip">State machines</span><span class="chip">Autonomous schedules</span><span class="chip">Contextual dialogue</span><span class="chip">IK</span><span class="chip">Pathfinding</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Combat Warriors boss AI, the Eternal Bob fight in Slap Battles, job-running GOAP NPCs in Boundless (scored 98 as a university assignment), 400 physics-simulated NPCs at 60 FPS</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-net" aria-labelledby="t-net" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">Networking and multiplayer</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>I've designed networking layers from scratch and worked inside dozens of existing ones. The goal is always the same: it should feel smooth and be hard to abuse.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Lightweight replication</span><span class="chip">Rate limiting</span><span class="chip">Anti-cheat</span><span class="chip">Server authority</span><span class="chip">Network simulation</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Every multiplayer game on this page</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-data" aria-labelledby="t-data" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">Data management</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>Inventories, trading, progression and saving, with reconciliation that stays efficient as player data grows. These days I lean on ProfileStore for the saving layer and spend my time on what sits above it.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Inventory systems</span><span class="chip">Trading</span><span class="chip">Progression</span><span class="chip">Reconciliation</span><span class="chip">ProfileStore</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Anime Warriors, Slap Battles, Sunshine Valley</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-play" aria-labelledby="t-play" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">Gameplay systems</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>I can take a gameplay idea, small or ambitious, work out where the technical risk is, and build it through to something polished.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">RPG systems</span><span class="chip">High-speed boss fights</span><span class="chip">PvP combat</span><span class="chip">Farming</span><span class="chip">Fishing</span><span class="chip">Cooking</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Combat Warriors, Anime Warriors, Slap Battles, Sunshine Valley, Boundless</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-ui" aria-labelledby="t-ui" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">UI and client engineering</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>Reactive, component-based interfaces, custom input handling, and the feedback that makes a button feel good to press.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">React</span><span class="chip">Roact</span><span class="chip">Fusion</span><span class="chip">Input systems</span><span class="chip">UX feedback</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Anime Warriors (the whole UI), Slap Battles, Sunshine Valley</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-perf" aria-labelledby="t-perf" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">Performance</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>Teams have hired me specifically to find out why their game runs badly and fix it. I profile first, then work through fixes in batches with data to back each one.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Profiling</span><span class="chip">Memory usage</span><span class="chip">Simulation cost</span><span class="chip">Large-scale systems</span><span class="chip">Low-end devices</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Contract work for several studios, and every game I lead</dd></div>
+        </dl>
+
+        <dl class="prop-panel" role="tabpanel" id="s-tool" aria-labelledby="t-tool" hidden>
+          <div class="prop-row"><dt>Name</dt><dd class="name">Development tooling</dd></div>
+          <div class="prop-row"><dt>Summary</dt><dd>Version control and a proper editor workflow, so a codebase stays maintainable as the team grows.</dd></div>
+          <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Rojo</span><span class="chip">Git</span><span class="chip">VS Code</span><span class="chip">Code review</span></dd></div>
+          <div class="prop-row"><dt>ShippedIn</dt><dd>Slap Battles, which I moved from Studio-only scripts to a Git repository without taking the game down</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="log" aria-labelledby="h-log">
+    <div class="sec-head">
+      <span class="path">game.UpdateLog</span>
+      <h2 id="h-log">Update log</h2>
+    </div>
+    <ol class="log">
+      <li class="live"><span class="when">Now</span><div class="what"><strong>Sunshine Valley</strong><span>Building a multiplayer farming and life-sim game.</span></div></li>
+      <li><span class="when">2023 – mid 2024</span><div class="what"><strong>Lead developer, Slap Battles</strong><span>Full rewrite while live. The game went from 200M to 1.5B plays.</span></div></li>
+      <li><span class="when">2022</span><div class="what"><strong>Combat Warriors and the Anime Warriors revamp</strong><span>Boss fight system for one, project lead with backend and UI for the other.</span></div></li>
+      <li><span class="when">2021</span><div class="what"><strong>Anime Warriors launches</strong><span>Entire backend and UI.</span></div></li>
+      <li><span class="when">2020</span><div class="what"><strong>BSc (Hons) Games Technology, 2:1</strong><span>Coventry University. Shipped Boundless as its sole programmer alongside the degree.</span></div></li>
+      <li><span class="when">2019</span><div class="what"><strong>Roblox Accelerator and Egg Hunt 2019</strong><span>Built Craftknight Crusaders on my second Accelerator programme. Roblox then contracted me for Egg Hunt 2019: Scrambled in Time.</span></div></li>
+      <li><span class="when">2018</span><div class="what"><strong>Roblox Accelerator and a Game Jam podium</strong><span>Worked on Dragon Soul on my first Accelerator programme. Second place out of about 60 teams in the Game Jam.</span></div></li>
+      <li><span class="when">2017</span><div class="what"><strong>Roblox Halloween event</strong><span>Roblox contracted me as a programmer on Hallow's Eve, my first work for them.</span></div></li>
+      <li><span class="when">2013</span><div class="what"><strong>Started programming</strong><span>Lua first. C#, C++, JavaScript, PHP and Python came later.</span></div></li>
+      <li><span class="when">2008</span><div class="what"><strong>Joined Roblox</strong></div></li>
+    </ol>
+  </section>
+
+  <section id="contact" aria-labelledby="h-contact">
+    <div class="duo">
+      <div class="say">
+        <span class="path">Players.Arcwise</span>
+        <h2 id="h-contact">How I work</h2>
+        <p>My strongest skill is understanding both sides of a game: the engineering underneath and the design on top. I can take a concept, find the hard technical problems in it, and design a foundation that the rest of the team can build on with confidence.</p>
+        <p>I've led development on most of my projects. That means making the architectural calls, coordinating contributors, prioritising features, reviewing code, and turning a creative vision into something that can actually be built.</p>
+      </div>
+      <div class="contact win">
+        <h3>Get in touch</h3>
+        <div class="mail">
+          <code id="email">JacksonAmeche@gmail.com</code>
+          <button class="btn btn-sm" id="b-copy" type="button">Copy</button>
+        </div>
+        <ul>
+          <li><a href="https://devforum.roblox.com/u/Arcwise">Arcwise on the Roblox DevForum</a></li>
+          <li><a href="https://devforum.roblox.com/t/arcwise-game-programmer-portfolio/800920">DevForum portfolio thread</a></li>
+        </ul>
+        <small>Based in the UK. References available on request.</small>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jonathan Jackson Ameche</span>
+    <span>Roblox and the games named here belong to their owners.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':mq.matches;}
+
+  /* day / night */
+  var clock=document.getElementById('clock');
+  function paintClock(){clock.textContent='ClockTime = '+(isDark()?'0':'14');}
+  clock.addEventListener('click',function(){root.setAttribute('data-theme',isDark()?'light':'dark');});
+  paintClock();
+
+  /* explorer tabs */
+  var tabs=[].slice.call(document.querySelectorAll('.tree [role="tab"]'));
+  function pick(tab,focus){
+    tabs.forEach(function(t){
+      var on=t===tab;
+      t.setAttribute('aria-selected',on?'true':'false');
+      t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+    });
+    if(focus)tab.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(t);});
+    t.addEventListener('keydown',function(e){
+      var d=(e.key==='ArrowDown'||e.key==='ArrowRight')?1:(e.key==='ArrowUp'||e.key==='ArrowLeft')?-1:0;
+      if(!d)return;
+      e.preventDefault();
+      pick(tabs[(i+d+tabs.length)%tabs.length],true);
+    });
+  });
+
+  /* copy email */
+  var copyBtn=document.getElementById('b-copy'),email=document.getElementById('email');
+  copyBtn.addEventListener('click',function(){
+    function selectIt(){var r=document.createRange();r.selectNodeContents(email);var s=window.getSelection();s.removeAllRanges();s.addRange(r);copyBtn.textContent='Selected';}
+    try{
+      navigator.clipboard.writeText(email.textContent).then(function(){copyBtn.textContent='Copied';},selectIt);
+    }catch(err){selectIt();}
+    setTimeout(function(){copyBtn.textContent='Copy';},1800);
+  });
+
+  /* videos: play inline on the self-hosted build, open YouTube everywhere else */
+  if(root.hasAttribute('data-embed')&&/^https?:$/.test(location.protocol)){
+    [].forEach.call(document.querySelectorAll('.vid-thumb[data-yt]'),function(a){
+      a.addEventListener('click',function(e){
+        if(e.metaKey||e.ctrlKey||e.shiftKey)return;
+        e.preventDefault();
+        var f=document.createElement('iframe'),st=a.getAttribute('data-start');
+        f.className='vid-frame';
+        f.src='https://www.youtube-nocookie.com/embed/'+a.getAttribute('data-yt')+'?autoplay=1&rel=0'+(st?'&start='+st:'');
+        f.title=(a.getAttribute('aria-label')||'Video').replace('Play video: ','');
+        f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen=true;
+        a.parentNode.replaceChild(f,a);
+      });
+    });
+  }
+
+  /* ---------- GOAP sandbox ---------- */
+  var cv=document.getElementById('sim');
+  var ctx=cv.getContext&&cv.getContext('2d');
+  if(!ctx)return;
+
+  var KEYS=['ore','wood','meat','ingot','sword','stew','soldOre','fedCamp','armedGuard'];
+  var BIT={};KEYS.forEach(function(k,i){BIT[k]=1<<i;});
+  var GOALMASK=BIT.soldOre|BIT.fedCamp|BIT.armedGuard;
+  var CARRY=['ore','wood','meat','ingot','sword','stew'];
+
+  var ST={
+    mine:{fx:.12,fy:.25,label:'Mine',top:26,front:32},
+    shop:{fx:.46,fy:.22,label:'Shop',top:26,front:34},
+    gate:{fx:.82,fy:.25,label:'Gate',top:34,front:34},
+    forest:{fx:.13,fy:.72,label:'Forest',top:26,front:36},
+    forge:{fx:.47,fy:.7,label:'Forge',top:32,front:34},
+    camp:{fx:.8,fy:.7,label:'Camp',top:26,front:36}
+  };
+  var ACTIONS=[
+    {name:'MineOre',at:'mine',time:1.4,pre:[],on:['ore'],off:[]},
+    {name:'ChopWood',at:'forest',time:1.2,pre:[],on:['wood'],off:[]},
+    {name:'HuntBoar',at:'forest',time:1.6,pre:[],on:['meat'],off:[]},
+    {name:'SmeltIngot',at:'forge',time:1.3,pre:['ore','wood'],on:['ingot'],off:['ore','wood']},
+    {name:'ForgeSword',at:'forge',time:1.5,pre:['ingot'],on:['sword'],off:['ingot']},
+    {name:'CookStew',at:'camp',time:1.4,pre:['meat','wood'],on:['stew'],off:['meat','wood']},
+    {name:'ServeStew',at:'camp',time:.7,pre:['stew'],on:['fedCamp'],off:['stew']},
+    {name:'SellOre',at:'shop',time:.7,pre:['ore'],on:['soldOre'],off:['ore']},
+    {name:'ArmGuard',at:'gate',time:.9,pre:['sword'],on:['armedGuard'],off:['sword']}
+  ];
+  function bits(list){return list.reduce(function(m,k){return m|BIT[k];},0);}
+  ACTIONS.forEach(function(a){a.need=bits(a.pre);a.set=bits(a.on);a.clear=bits(a.off);});
+  var GOALS=[
+    {name:'SellOre',bit:BIT.soldOre,pay:3},
+    {name:'FeedCamp',bit:BIT.fedCamp,pay:6},
+    {name:'ArmGuard',bit:BIT.armedGuard,pay:12}
+  ];
+  var SPEED=115,W=0,H=0,cache={};
+
+  /* Uniform-cost search over (world state, location). Cost is walking time plus action time. */
+  function plan(mask,loc,goalBit){
+    var key=mask+'|'+loc+'|'+goalBit;
+    if(cache[key])return cache[key];
+    var open=[{mask:mask,loc:loc,cost:0,path:[]}],seen={};
+    while(open.length){
+      var bi=0;
+      for(var i=1;i<open.length;i++)if(open[i].cost<open[bi].cost)bi=i;
+      var n=open.splice(bi,1)[0];
+      if(n.mask&goalBit){cache[key]=n.path;return n.path;}
+      var sk=n.mask+'|'+n.loc;
+      if(seen[sk])continue;
+      seen[sk]=1;
+      for(var j=0;j<ACTIONS.length;j++){
+        var a=ACTIONS[j];
+        if((n.mask&a.need)!==a.need)continue;
+        var m=(n.mask|a.set)&~a.clear;
+        if(m===n.mask)continue;
+        var p=ST[n.loc],q=ST[a.at];
+        var walk=Math.sqrt((p.x-q.x)*(p.x-q.x)+(p.y-q.y)*(p.y-q.y))/SPEED;
+        open.push({mask:m,loc:a.at,cost:n.cost+walk+a.time,path:n.path.concat(a)});
+      }
+    }
+    return [];
+  }
+
+  var SHIRTS=['brick-blue','brick-red','brick-violet','brick-orange','brick-stone'];
+  var npcs=[],sel=null,serial=0;
+  function pad(n){return n<10?'0'+n:''+n;}
+  function newGoal(n){
+    var g;
+    do{g=GOALS[Math.floor(Math.random()*GOALS.length)];}while(g===n.goal&&Math.random()<.7);
+    n.goal=g;n.plan=plan(n.mask,n.loc,g.bit);n.i=0;n.t=0;n.ver++;
+  }
+  function spawn(){
+    var names=Object.keys(ST),loc=names[Math.floor(Math.random()*names.length)];
+    serial++;
+    var n={name:'Villager_'+pad(serial),loc:loc,mask:0,coins:0,ver:0,goal:null,plan:[],i:0,t:0,
+      ox:Math.random()*2-1,oy:Math.random()*2-1,phase:Math.random()*6,mode:'walk',
+      shirt:SHIRTS[serial%SHIRTS.length],x:0,y:0};
+    var s=ST[loc];
+    n.x=s.x+n.ox*30;n.y=s.y+s.front+n.oy*10;
+    newGoal(n);
+    npcs.push(n);
+    return n;
+  }
+  function setCount(c){
+    while(npcs.length<c)spawn();
+    if(npcs.length>c){npcs.length=c;serial=c;}
+    if(!sel||npcs.indexOf(sel)<0)sel=npcs[0];
+  }
+  function clamp(v,a,b){return v<a?a:v>b?b:v;}
+  function target(n,a){
+    var s=ST[a.at];
+    var crowd=npcs.length>12,sx=crowd?Math.min(70,W*.11):30,sy=crowd?34:10;
+    return {x:clamp(s.x+n.ox*sx,12,W-12),y:clamp(s.y+s.front+n.oy*sy,30,H-6)};
+  }
+  function update(dt){
+    for(var k=0;k<npcs.length;k++){
+      var n=npcs[k],a=n.plan[n.i];
+      if(!a){newGoal(n);continue;}
+      var t=target(n,a),dx=t.x-n.x,dy=t.y-n.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d>1.5){
+        var mv=Math.min(d,SPEED*dt);
+        n.mode='walk';n.x+=dx/d*mv;n.y+=dy/d*mv;n.phase+=dt*14;
+      }else{
+        n.mode='work';n.t+=dt;
+        if(n.t>=a.time){
+          n.mask=(n.mask|a.set)&~a.clear;n.loc=a.at;n.t=0;n.i++;n.ver++;
+          if(n.i>=n.plan.length){n.coins+=n.goal.pay;n.mask&=~GOALMASK;newGoal(n);}
+        }
+      }
+    }
+  }
+
+  /* drawing */
+  var C={},ground=null,dpr=1;
+  var TOKENS=['ground','ground-stud','stroke','panel','ink','water','soil','plate','brick-red','brick-blue','brick-yellow','brick-green','brick-orange','brick-violet','brick-stone','on-brick','brick-ink','select','on-select'];
+  function readColors(){
+    var s=getComputedStyle(root);
+    TOKENS.forEach(function(k){C[k]=s.getPropertyValue('--'+k).trim();});
+    ground=null;
+  }
+  function rr(x,y,w,h,r){ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h);}
+  function block(x,y,w,h,fill,r){
+    rr(x,y,w,h,r==null?6:r);ctx.fillStyle=fill;ctx.fill();
+    ctx.lineWidth=2.5;ctx.strokeStyle=C.stroke;ctx.stroke();
+  }
+  function disc(x,y,rx,ry,fill){
+    ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();
+    ctx.lineWidth=2.5;ctx.strokeStyle=C.stroke;ctx.stroke();
+  }
+  function tri(x1,y1,x2,y2,x3,y3,fill){
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.closePath();
+    ctx.fillStyle=fill;ctx.fill();ctx.lineJoin='round';ctx.lineWidth=2.5;ctx.strokeStyle=C.stroke;ctx.stroke();
+  }
+  var DRAW={
+    mine:function(s){
+      block(s.x-30,s.y-20,60,40,C['brick-stone'],[22,22,6,6]);
+      block(s.x-11,s.y-4,22,24,C['brick-ink'],[11,11,0,0]);
+      ctx.fillStyle=C['brick-yellow'];
+      ctx.fillRect(s.x-23,s.y-8,5,5);ctx.fillRect(s.x+16,s.y-11,5,5);ctx.fillRect(s.x+19,s.y+6,4,4);
+    },
+    shop:function(s){
+      block(s.x-30,s.y-6,60,24,C.panel);
+      for(var i=0;i<5;i++){ctx.fillStyle=i%2?C['on-brick']:C['brick-red'];ctx.fillRect(s.x-30+i*12,s.y-24,12,17);}
+      rr(s.x-30,s.y-24,60,17,3);ctx.lineWidth=2.5;ctx.strokeStyle=C.stroke;ctx.stroke();
+    },
+    gate:function(s){
+      block(s.x-13,s.y-10,26,30,C.soil,[12,12,0,0]);
+      block(s.x-33,s.y-22,21,42,C.plate,3);
+      block(s.x+12,s.y-22,21,42,C.plate,3);
+      block(s.x-36,s.y-30,27,10,C.plate,2);
+      block(s.x+9,s.y-30,27,10,C.plate,2);
+    },
+    forest:function(s){
+      [[-22,2],[21,4],[0,-8]].forEach(function(o){
+        block(s.x+o[0]-3,s.y+o[1],6,16,C.soil,2);
+        disc(s.x+o[0],s.y+o[1]-7,14,14,C['brick-green']);
+      });
+    },
+    forge:function(s){
+      block(s.x+10,s.y-30,11,16,C['brick-stone'],2);
+      block(s.x-28,s.y-18,56,38,C.plate);
+      block(s.x-21,s.y-6,20,26,C['brick-ink'],[10,10,0,0]);
+      block(s.x-16,s.y+6,10,14,C['brick-orange'],[5,5,0,0]);
+      block(s.x+5,s.y+8,17,7,C['brick-stone'],2);
+    },
+    camp:function(s){
+      tri(s.x-36,s.y+18,s.x-12,s.y-22,s.x+12,s.y+18,C['brick-red']);
+      tri(s.x-19,s.y+18,s.x-12,s.y,s.x-5,s.y+18,C['brick-ink']);
+      disc(s.x+27,s.y+11,8,8,C['brick-orange']);
+      disc(s.x+27,s.y+12,4,4,C['brick-yellow']);
+    }
+  };
+  function buildGround(){
+    ground=document.createElement('canvas');
+    ground.width=cv.width;ground.height=cv.height;
+    var g=ground.getContext('2d');
+    g.setTransform(dpr,0,0,dpr,0,0);
+    g.fillStyle=C.ground;g.fillRect(0,0,W,H);
+    g.fillStyle=C['ground-stud'];
+    for(var y=14;y<H+14;y+=28)for(var x=14;x<W+14;x+=28){g.beginPath();g.arc(x,y,7,0,Math.PI*2);g.fill();}
+  }
+  function label(text,x,y,font){
+    ctx.font=font;ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    ctx.lineJoin='round';ctx.lineWidth=4;ctx.strokeStyle=C['brick-ink'];ctx.strokeText(text,x,y);
+    ctx.fillStyle=C['on-brick'];ctx.fillText(text,x,y);
+  }
+  function tag(text,x,y){
+    ctx.font='700 12px Inconsolata, monospace';
+    var w=ctx.measureText(text).width+12;
+    x=clamp(x,w/2+3,W-w/2-3);
+    rr(x-w/2,y-17,w,18,5);ctx.fillStyle=C.panel;ctx.fill();
+    ctx.lineWidth=2;ctx.strokeStyle=C.stroke;ctx.stroke();
+    ctx.fillStyle=C.ink;ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText(text,x,y-4);
+  }
+  function drawNpc(n,few){
+    var x=Math.round(n.x),y=Math.round(n.y),isSel=n===sel;
+    var sw=n.mode==='walk'?Math.sin(n.phase):0,l=sw>0?-2:0,r=sw<0?-2:0;
+    if(isSel){
+      ctx.beginPath();ctx.ellipse(x,y,14,6,0,0,Math.PI*2);
+      ctx.fillStyle=C['brick-yellow'];ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=C.stroke;ctx.stroke();
+    }
+    ctx.fillStyle=C['brick-ink'];
+    ctx.fillRect(x-6,y-9,12,10);ctx.fillRect(x-9,y-18,18,11);ctx.fillRect(x-5,y-26,10,9);
+    ctx.fillStyle=C['brick-green'];
+    ctx.fillRect(x-5,y-8+l,4,8);ctx.fillRect(x+1,y-8+r,4,8);
+    ctx.fillStyle=C[n.shirt];ctx.fillRect(x-5,y-17,10,9);
+    ctx.fillStyle=C['brick-yellow'];
+    ctx.fillRect(x-8,y-17,3,9);ctx.fillRect(x+5,y-17,3,9);ctx.fillRect(x-4,y-25,8,7);
+    var a=n.plan[n.i];
+    if(n.mode==='work'&&a){
+      ctx.fillStyle=C['brick-ink'];ctx.fillRect(x-10,y-33,20,5);
+      ctx.fillStyle=C['brick-yellow'];ctx.fillRect(x-9,y-32,18*Math.min(1,n.t/a.time),3);
+    }
+    if(a&&(few||isSel))tag(a.name,x,y-(n.mode==='work'?36:30));
+  }
+  function draw(){
+    if(!W)return;
+    if(!ground)buildGround();
+    ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(ground,0,0);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var k;
+    for(k in ST){DRAW[k](ST[k]);}
+    for(k in ST){label(ST[k].label,ST[k].x,ST[k].y-ST[k].top-6,'600 13px Fredoka, sans-serif');}
+    var few=npcs.length<=12;
+    var order=npcs.slice().sort(function(a,b){return a.y-b.y;});
+    for(var i=0;i<order.length;i++)if(order[i]!==sel)drawNpc(order[i],few);
+    if(sel)drawNpc(sel,few);
+  }
+
+  /* inspector */
+  var pName=document.getElementById('p-name'),pGoal=document.getElementById('p-goal'),
+      pState=document.getElementById('p-state'),pCoins=document.getElementById('p-coins'),
+      pPlan=document.getElementById('p-plan'),readout=document.getElementById('readout');
+  var shown=null,shownVer=-1;
+  function inspect(){
+    if(!sel||(sel===shown&&sel.ver===shownVer))return;
+    shown=sel;shownVer=sel.ver;
+    pName.textContent=sel.name;pGoal.textContent=sel.goal.name;pCoins.textContent=sel.coins;
+    var have=CARRY.filter(function(k){return sel.mask&BIT[k];});
+    pState.textContent=have.length?have.join(', '):'nothing';
+    pPlan.textContent='';
+    sel.plan.forEach(function(a,i){
+      var li=document.createElement('li');
+      li.textContent=a.name;
+      if(i<sel.i)li.className='done';
+      else if(i===sel.i){li.className='now';li.setAttribute('aria-current','step');}
+      pPlan.appendChild(li);
+    });
+  }
+
+  /* sizing */
+  function resize(){
+    var w=Math.round(cv.clientWidth);
+    if(!w)return;
+    var h=w>=560?444:430;
+    if(w===W&&h===H)return;
+    if(W){var sx=w/W,sy=h/H;npcs.forEach(function(n){n.x*=sx;n.y*=sy;});}
+    W=w;H=h;dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.style.height=h+'px';cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+    for(var k in ST){ST[k].x=ST[k].fx*W;ST[k].y=ST[k].fy*H;}
+    cache={};ground=null;
+  }
+
+  /* loop */
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var playing=!reduce,visible=true,raf=0,last=0,frames=0,fpsAt=0,fps=0;
+  var bPlay=document.getElementById('b-play'),bSpawn=document.getElementById('b-spawn'),bNext=document.getElementById('b-next');
+  function paintReadout(){readout.textContent=npcs.length+' NPCs'+(playing&&fps?' · '+fps+' FPS':'');}
+  function frame(ts){
+    raf=0;
+    if(!playing||!visible)return;
+    var dt=Math.min(.05,(ts-last)/1000);last=ts;
+    if(dt>0)update(dt);
+    draw();inspect();
+    frames++;
+    if(ts-fpsAt>=500){fps=Math.round(frames*1000/(ts-fpsAt));frames=0;fpsAt=ts;paintReadout();}
+    raf=requestAnimationFrame(frame);
+  }
+  function sync(){
+    bPlay.textContent=playing?'Pause':'Play';
+    if(playing&&visible&&!raf){last=fpsAt=performance.now();frames=0;raf=requestAnimationFrame(frame);}
+    paintReadout();
+  }
+  function still(){draw();inspect();paintReadout();}
+
+  bPlay.addEventListener('click',function(){playing=!playing;sync();});
+  bSpawn.addEventListener('click',function(){
+    var many=npcs.length<400;
+    setCount(many?400:6);
+    bSpawn.textContent=many?'Back to 6':'Spawn 400';
+    still();
+  });
+  bNext.addEventListener('click',function(){sel=npcs[(npcs.indexOf(sel)+1)%npcs.length];still();});
+  cv.addEventListener('click',function(e){
+    var b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top,best=null,bd=30*30;
+    npcs.forEach(function(n){var dx=n.x-x,dy=n.y-13-y,d=dx*dx+dy*dy;if(d<bd){bd=d;best=n;}});
+    if(best){sel=best;still();}
+  });
+
+  function retheme(){paintClock();readColors();still();}
+  new MutationObserver(retheme).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  if(mq.addEventListener)mq.addEventListener('change',retheme);
+  if(window.ResizeObserver)new ResizeObserver(function(){resize();still();}).observe(cv);
+  else window.addEventListener('resize',function(){resize();still();});
+  if(window.IntersectionObserver)new IntersectionObserver(function(en){visible=en[0].isIntersecting;sync();}).observe(cv);
+
+  readColors();resize();setCount(6);still();sync();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(still);
+})();
+</script>
+</body>
+</html>
