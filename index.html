@@ -163,10 +163,15 @@ main{display:flex;flex-direction:column;gap:clamp(64px,9vw,112px);padding-block:
 }
 
 /* games */
-.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 24px}
-.game{display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.games{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:28px 24px}
+.game{display:flex;flex-direction:column;overflow:hidden;min-width:0;grid-column:span 2}
 .game-feature{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.game-half{grid-column:span 3}
+.game-wide{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
 .feature-side{display:flex;flex-direction:column;min-width:0;border-right:var(--bw) solid var(--stroke)}
+.game-wide .thumb{border-bottom:0}
+.game-wide .game-body{justify-content:center}
+.game-wide .play{margin-top:4px}
 .thumb{display:block;aspect-ratio:16/9;max-width:100%;overflow:hidden;border-bottom:var(--bw) solid var(--stroke)}
 .thumb img{display:block;width:100%;height:100%;object-fit:cover}
 .thumb:focus-visible{outline-offset:-5px}
@@ -193,6 +198,9 @@ main{display:flex;flex-direction:column;gap:clamp(64px,9vw,112px);padding-block:
 @media (max-width:900px){
   .games{grid-template-columns:minmax(0,1fr)}
   .game-feature{grid-template-columns:minmax(0,1fr)}
+  .game,.game-half{grid-column:auto}
+  .game-wide{grid-template-columns:minmax(0,1fr)}
+  .game-wide .thumb{border-bottom:var(--bw) solid var(--stroke)}
   .feature-side{border-right:0}
   .feature-side .growth{margin-bottom:4px}
 }
@@ -390,16 +398,6 @@ footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
       </article>
 
       <article class="game win">
-        <a class="thumb t-combat" href="https://www.roblox.com/games/4282985734"><img src="thumbs/combat-warriors.jpg" alt="Combat Warriors on Roblox" width="768" height="432" loading="lazy"></a>
-        <div class="game-body">
-          <p class="meta">Boss systems · late 2022</p>
-          <h3>Combat Warriors</h3>
-          <p>I built the boss fight system and the boss AI behind it, along with a number of weapons and cosmetics.</p>
-          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/4282985734">Open on Roblox</a>
-        </div>
-      </article>
-
-      <article class="game win">
         <a class="thumb t-anime" href="https://www.roblox.com/games/7177496972"><img src="thumbs/anime-warriors.jpg" alt="Anime Warriors on Roblox" width="768" height="432" loading="lazy"></a>
         <div class="game-body">
           <p class="meta">Backend, UI, project lead · 2021 to 2022</p>
@@ -409,7 +407,7 @@ footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
         </div>
       </article>
 
-      <article class="game win">
+      <article class="game game-half win">
         <a class="thumb t-egg" href="https://www.roblox.com/games/2546368429/Egg-Hunt-2019-Scrambled-In-Time"><img src="thumbs/egg-hunt-2019.jpg" alt="Egg Hunt 2019: Scrambled in Time on Roblox" width="768" height="432" loading="lazy"></a>
         <div class="game-body">
           <p class="meta">Programmer · contracted by Roblox · 2019</p>
@@ -419,13 +417,28 @@ footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
         </div>
       </article>
 
-      <article class="game win">
+      <article class="game game-half win">
         <a class="thumb t-hallow" href="https://www.roblox.com/games/876729828/Hallows-Eve-2017-A-Tale-of-Lost-Souls"><img src="thumbs/hallows-eve-2017.jpg" alt="Hallow's Eve 2017: A Tale of Lost Souls on Roblox" width="768" height="432" loading="lazy"></a>
         <div class="game-body">
           <p class="meta">Programmer · contracted by Roblox · 2017</p>
           <h3>Hallow's Eve 2017: A Tale of Lost Souls</h3>
           <p>Roblox's official Halloween event for 2017, and my first contract for Roblox.</p>
           <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/876729828/Hallows-Eve-2017-A-Tale-of-Lost-Souls">Open on Roblox</a>
+        </div>
+      </article>
+    </div>
+
+    <h3 class="sub-h">Games I've contributed to</h3>
+    <div class="games">
+      <article class="game game-feature game-wide win">
+        <div class="feature-side t-combat">
+          <a class="thumb t-combat" href="https://www.roblox.com/games/4282985734"><img src="thumbs/combat-warriors.jpg" alt="Combat Warriors on Roblox" width="768" height="432" loading="lazy"></a>
+        </div>
+        <div class="game-body">
+          <p class="meta">Major contributor · boss systems · late 2022</p>
+          <h3>Combat Warriors</h3>
+          <p>An established game I contributed heavily to. I built the boss fight system and the boss AI behind it, along with a number of weapons and cosmetics.</p>
+          <a class="btn btn-plain btn-sm play" href="https://www.roblox.com/games/4282985734">Open on Roblox</a>
         </div>
       </article>
     </div>
@@ -563,56 +576,56 @@ footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
           <div class="prop-row"><dt>Name</dt><dd class="name">Game architecture</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>I build foundations other programmers want to use. Several teams have picked up frameworks I wrote and kept building on them long after.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Reusable frameworks</span><span class="chip">Component-based design</span><span class="chip">Event-driven</span><span class="chip">OOP</span><span class="chip">Hashing</span><span class="chip">Promises</span><span class="chip">Maids</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Slap Battles (full rewrite while live), Anime Warriors, Sunshine Valley</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Slap Battles (full rewrite while live), Anime Warriors, Sunshine Valley</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-npc" aria-labelledby="t-npc" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">AI and NPC systems</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>My bread and butter from the start. I like NPCs that are fun to interact with and a little smarter than you expect.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">GOAP</span><span class="chip">Behaviour trees</span><span class="chip">State machines</span><span class="chip">Autonomous schedules</span><span class="chip">Contextual dialogue</span><span class="chip">IK</span><span class="chip">Pathfinding</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Combat Warriors boss AI, the Eternal Bob fight in Slap Battles, job-running GOAP NPCs in Boundless (scored 98 as a university assignment), 400 physics-simulated NPCs at 60 FPS</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Combat Warriors boss AI, the Eternal Bob fight in Slap Battles, job-running GOAP NPCs in Boundless (scored 98 as a university assignment), 400 physics-simulated NPCs at 60 FPS</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-net" aria-labelledby="t-net" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">Networking and multiplayer</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>I've designed networking layers from scratch and worked inside dozens of existing ones. The goal is always the same: it should feel smooth and be hard to abuse.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Lightweight replication</span><span class="chip">Rate limiting</span><span class="chip">Anti-cheat</span><span class="chip">Server authority</span><span class="chip">Network simulation</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Every multiplayer game on this page</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Every multiplayer game on this page</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-data" aria-labelledby="t-data" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">Data management</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>Inventories, trading, progression and saving, with reconciliation that stays efficient as player data grows. These days I lean on ProfileStore for the saving layer and spend my time on what sits above it.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Inventory systems</span><span class="chip">Trading</span><span class="chip">Progression</span><span class="chip">Reconciliation</span><span class="chip">ProfileStore</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Anime Warriors, Slap Battles, Sunshine Valley</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Anime Warriors, Slap Battles, Sunshine Valley</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-play" aria-labelledby="t-play" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">Gameplay systems</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>I can take a gameplay idea, small or ambitious, work out where the technical risk is, and build it through to something polished.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">RPG systems</span><span class="chip">High-speed boss fights</span><span class="chip">PvP combat</span><span class="chip">Farming</span><span class="chip">Fishing</span><span class="chip">Cooking</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Combat Warriors, Anime Warriors, Slap Battles, Sunshine Valley, Boundless</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Combat Warriors, Anime Warriors, Slap Battles, Sunshine Valley, Boundless</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-ui" aria-labelledby="t-ui" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">UI and client engineering</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>Reactive, component-based interfaces, custom input handling, and the feedback that makes a button feel good to press.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">React</span><span class="chip">Roact</span><span class="chip">Fusion</span><span class="chip">Input systems</span><span class="chip">UX feedback</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Anime Warriors (the whole UI), Slap Battles, Sunshine Valley</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Anime Warriors (the whole UI), Slap Battles, Sunshine Valley</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-perf" aria-labelledby="t-perf" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">Performance</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>Teams have hired me specifically to find out why their game runs badly and fix it. I profile first, then work through fixes in batches with data to back each one.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Profiling</span><span class="chip">Memory usage</span><span class="chip">Simulation cost</span><span class="chip">Large-scale systems</span><span class="chip">Low-end devices</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Contract work for several studios, and every game I lead</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Contract work for several studios, and every game I lead</dd></div>
         </dl>
 
         <dl class="prop-panel" role="tabpanel" id="s-tool" aria-labelledby="t-tool" hidden>
           <div class="prop-row"><dt>Name</dt><dd class="name">Development tooling</dd></div>
           <div class="prop-row"><dt>Summary</dt><dd>Version control and a proper editor workflow, so a codebase stays maintainable as the team grows.</dd></div>
           <div class="prop-row"><dt>Techniques</dt><dd class="chips"><span class="chip">Rojo</span><span class="chip">Git</span><span class="chip">VS Code</span><span class="chip">Code review</span></dd></div>
-          <div class="prop-row"><dt>ShippedIn</dt><dd>Slap Battles, which I moved from Studio-only scripts to a Git repository without taking the game down</dd></div>
+          <div class="prop-row"><dt>UsedIn</dt><dd>Slap Battles, which I moved from Studio-only scripts to a Git repository without taking the game down</dd></div>
         </dl>
       </div>
     </div>
@@ -676,7 +689,7 @@ footer span{background:var(--plate);padding:2px 8px;border-radius:6px}
     <ol class="log">
       <li class="live"><span class="when">Now</span><div class="what"><strong>Sunshine Valley</strong><span>Building a multiplayer farming and life-sim game.</span></div></li>
       <li><span class="when">2023 – mid 2024</span><div class="what"><strong>Lead developer, Slap Battles</strong><span>Full rewrite while live. The game went from 200M to 1.5B plays.</span></div></li>
-      <li><span class="when">2022</span><div class="what"><strong>Combat Warriors and the Anime Warriors revamp</strong><span>Boss fight system for one, project lead with backend and UI for the other.</span></div></li>
+      <li><span class="when">2022</span><div class="what"><strong>Anime Warriors revamp and Combat Warriors bosses</strong><span>Led the Anime Warriors revamp, with backend and UI. Contributed the boss fight system to Combat Warriors.</span></div></li>
       <li><span class="when">2021</span><div class="what"><strong>Anime Warriors launches</strong><span>Entire backend and UI.</span></div></li>
       <li><span class="when">2020</span><div class="what"><strong>BSc (Hons) Games Technology, 2:1</strong><span>Coventry University. Shipped Boundless as its sole programmer alongside the degree.</span></div></li>
       <li><span class="when">2019</span><div class="what"><strong>Roblox Accelerator and Egg Hunt 2019</strong><span>Built Craftknight Crusaders on my second Accelerator programme. Roblox then contracted me for Egg Hunt 2019: Scrambled in Time.</span></div></li>
